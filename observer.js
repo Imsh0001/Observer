@@ -1,48 +1,52 @@
-class Subject {
+
+class Newspaper {
     constructor() {
-        this.observers = [];
+        this.subscribers = [];
     }
 
 
-    addObserver(observer) {
-        this.observers.push(observer);
-    }
-
-    removeObserver(observer) {
-        this.observers = this.observers.filter(obs => obs !== observer);
+    subscribe(subscriber) {
+        this.subscribers.push(subscriber);
     }
 
 
-    notifyObservers(data) {
-        this.observers.forEach(observer => observer.update(data));
+    unsubscribe(subscriber) {
+        this.subscribers = this.subscribers.filter(sub => sub !== subscriber);
+    }
+
+
+    publish(issue) {
+        console.log(`Ny udgave udgivet: ${issue}`);
+        this.subscribers.forEach(subscriber => subscriber.notify(issue));
     }
 }
 
-
-class Observer {
+class Subscriber {
     constructor(name) {
         this.name = name;
     }
 
 
-    update(data) {
-        console.log(`${this.name} modtog data: ${data}`);
+    notify(issue) {
+        console.log(`${this.name} blev notificeret om: ${issue}`);
     }
 }
 
 
-const subject = new Subject();
+const newspaper = new Newspaper();
 
-const observer1 = new Observer("Observer 1");
-const observer2 = new Observer("Observer 2");
-
-subject.addObserver(observer1);
-subject.addObserver(observer2);
-
-subject.notifyObservers("Ny besked til observatører, her er en opdatering");
-subject.notifyObservers("Vi har lavet en ændring i systemet")
+const Emil = new Subscriber("Emil");
+const Marie = new Subscriber("Marie");
 
 
-subject.removeObserver(observer1);
+newspaper.subscribe(Emil);
+newspaper.subscribe(Marie);
 
-subject.notifyObservers("Det kun observer 2 der vil modtage denne besked");
+
+newspaper.publish("Udgave #1");
+
+
+newspaper.unsubscribe(Emil);
+
+
+newspaper.publish("Udgave #2");
